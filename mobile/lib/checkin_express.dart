@@ -9,15 +9,15 @@ const Map<String, int> respuestasDispositivoDemo = {
   'sedentarismo': 2,
 };
 
-/// Señales que siguen necesitando una respuesta consciente de la persona.
-const Set<String> clavesPreguntasManuales = {
-  'energia',
-  'estado_corporal',
-  'calidad_sueno',
-};
-
-bool esPreguntaManual(String clave) => clavesPreguntasManuales.contains(clave);
-
-List<Map<String, dynamic>> preguntasManuales(List<Map<String, dynamic>> preguntas) {
-  return preguntas.where((pregunta) => esPreguntaManual(pregunta['clave'] as String)).toList();
+/// Devuelve solo las preguntas cuyo dato todavía no está disponible.
+///
+/// Así el flujo no depende de una lista fija de preguntas manuales: si mañana
+/// aparece o desaparece una señal del dispositivo, el check-in se adapta.
+List<Map<String, dynamic>> preguntasPendientes(
+  List<Map<String, dynamic>> preguntas, {
+  Map<String, int> disponibles = respuestasDispositivoDemo,
+}) {
+  return preguntas
+      .where((pregunta) => !disponibles.containsKey(pregunta['clave'] as String))
+      .toList();
 }

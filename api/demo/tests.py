@@ -28,6 +28,8 @@ class IndiceTests(APITestCase):
         self.assertEqual(factores[0]["clave"], "energia")
         self.assertEqual(factores[0]["respuesta"], "Muy baja")
         self.assertEqual(factores[0]["puntaje"], 0)
+        self.assertEqual(factores[0]["componente"]["codigo"], "BSI")
+        self.assertNotIn("estado", factores[0])
         self.assertLessEqual(factores[0]["puntaje"], factores[-1]["puntaje"])
 
 
@@ -51,6 +53,21 @@ class ApiTests(APITestCase):
         self.assertEqual(r.status_code, 409)
         r = self.client.post("/api/checkin/?fecha=2030-01-02", {"respuestas": BUENAS}, format="json")
         self.assertEqual(r.status_code, 201)
+
+    def test_indice_incluye_contexto_del_dia_anterior(self):
+        self.client.post("/api/checkin/?fecha=2030-01-01", {"respuestas": BUENAS}, format="json")
+        self.client.post(
+            "/api/entrenamiento/registros/?fecha=2030-01-01",
+            {"sesion": "movilidad-matutina", "valoracion": 5, "esfuerzo": 3},
+            format="json",
+        )
+
+        respuesta = self.client.get("/api/indice/hoy/?fecha=2030-01-02").json()
+
+        self.assertFalse(respuesta["hecho"])
+        self.assertEqual(respuesta["anterior"]["indice"], 100)
+        self.assertEqual(respuesta["anterior"]["sesion_completada"]["titulo"], "Movilidad matutina")
+        self.assertEqual(respuesta["anterior"]["sesion_completada"]["esfuerzo"], 3)
 
     def test_dia_malo_recomienda_recuperacion(self):
         self.client.post("/api/checkin/", {"respuestas": MALAS}, format="json")

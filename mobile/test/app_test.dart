@@ -11,12 +11,35 @@ void main() {
     expect(Api.instancia.diasAdelante.value, 0);
   });
 
-  test('el check-in express mantiene tres señales manuales', () {
+  test('el check-in express pregunta solo las señales que faltan', () {
+    final preguntas = <Map<String, dynamic>>[
+      {'clave': 'energia'},
+      {'clave': 'horas_sueno'},
+      {'clave': 'actividad_ayer'},
+      {'clave': 'calidad_sueno'},
+    ];
+
+    final pendientes = preguntasPendientes(preguntas);
+
     expect(
-      clavesPreguntasManuales,
-      containsAll(<String>['energia', 'estado_corporal', 'calidad_sueno']),
+      pendientes.map((pregunta) => pregunta['clave']),
+      orderedEquals(<String>['energia', 'calidad_sueno']),
     );
-    expect(clavesPreguntasManuales.length, 3);
+  });
+
+  test('el flujo se adapta si una señal del dispositivo deja de estar disponible', () {
+    final preguntas = <Map<String, dynamic>>[
+      {'clave': 'energia'},
+      {'clave': 'horas_sueno'},
+    ];
+    final disponiblesSinSueno = Map<String, int>.from(respuestasDispositivoDemo)..remove('horas_sueno');
+
+    final pendientes = preguntasPendientes(preguntas, disponibles: disponiblesSinSueno);
+
+    expect(
+      pendientes.map((pregunta) => pregunta['clave']),
+      orderedEquals(<String>['energia', 'horas_sueno']),
+    );
   });
 
   test('el prototipo precarga tres señales simuladas del dispositivo', () {

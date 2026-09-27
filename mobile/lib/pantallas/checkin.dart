@@ -4,8 +4,9 @@ import '../api.dart';
 import '../checkin_express.dart';
 import '../tema.dart';
 
-/// Check-in express: pregunta solo las señales subjetivas y reutiliza datos
-/// simulados del dispositivo para mantener las 6 variables del Readiness Index.
+/// Check-in express: pregunta solo las señales que todavía no están disponibles
+/// y reutiliza datos simulados del dispositivo para mantener las 6 variables del
+/// Readiness Index.
 class PantallaCheckin extends StatefulWidget {
   const PantallaCheckin({super.key});
 
@@ -72,7 +73,7 @@ class _PantallaCheckinState extends State<PantallaCheckin> {
                     Text('Revisar datos del dispositivo', style: Theme.of(context).textTheme.titleLarge),
                     const SizedBox(height: 6),
                     const Text(
-                      'En este prototipo son datos simulados. Puede corregirlos antes de calcular su índice.',
+                      'En esta demo son datos simulados. En producción esta capa podría recibir señales de las integraciones de SaliHub. Puede corregirlas antes de calcular su índice.',
                       style: TextStyle(color: Colores.gris),
                     ),
                     const SizedBox(height: 20),
@@ -122,7 +123,7 @@ class _PantallaCheckinState extends State<PantallaCheckin> {
           if (!estado.hasData) return const Center(child: CircularProgressIndicator());
 
           final preguntas = estado.data!.cast<Map<String, dynamic>>();
-          final manuales = preguntasManuales(preguntas);
+          final manuales = preguntasPendientes(preguntas);
           if (manuales.isEmpty) return const Center(child: Text('No hay preguntas disponibles.'));
 
           final paso = _pasoActual < manuales.length ? _pasoActual : manuales.length - 1;
@@ -140,7 +141,7 @@ class _PantallaCheckinState extends State<PantallaCheckin> {
               Text('Buenos días 👋', style: Theme.of(context).textTheme.headlineMedium),
               const SizedBox(height: 6),
               const Text(
-                'Ya tenemos parte de la información de ayer. Solo necesitamos saber cómo se siente hoy.',
+                'Ya hay señales disponibles para hoy. Solo preguntaremos la información que todavía falta.',
                 style: TextStyle(color: Colores.gris),
               ),
               const SizedBox(height: 18),
@@ -158,14 +159,17 @@ class _PantallaCheckinState extends State<PantallaCheckin> {
                         const Icon(Icons.watch_outlined, color: Colores.navy),
                         const SizedBox(width: 8),
                         Expanded(
-                          child: Text('3 señales preparadas', style: Theme.of(context).textTheme.titleMedium),
+                          child: Text(
+                            '${preguntasDispositivo.length} señales ya disponibles',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
                         ),
                         const Icon(Icons.check_circle, color: Colores.navy, size: 20),
                       ],
                     ),
                     const SizedBox(height: 4),
                     const Text(
-                      'Datos simulados del dispositivo para este prototipo.',
+                      'Simuladas en esta demo. El objetivo es no volver a preguntar datos que ya estén disponibles.',
                       style: TextStyle(color: Colores.gris, fontSize: 12),
                     ),
                     const SizedBox(height: 14),

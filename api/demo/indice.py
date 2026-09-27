@@ -33,12 +33,14 @@ def calcular(respuestas):
     return round(sum(puntajes) / len(puntajes) * 100)
 
 
-def _estado_factor(puntaje):
-    if puntaje >= 80:
-        return "Favorable"
-    if puntaje >= 50:
-        return "Intermedia"
-    return "A revisar"
+COMPONENTES_POR_SENAL = {
+    "energia": {"clave": "bsi", "codigo": "BSI", "nombre": "Señales corporales"},
+    "estado_corporal": {"clave": "bsi", "codigo": "BSI", "nombre": "Señales corporales"},
+    "horas_sueno": {"clave": "si", "codigo": "SI", "nombre": "Descanso percibido"},
+    "calidad_sueno": {"clave": "si", "codigo": "SI", "nombre": "Descanso percibido"},
+    "actividad_ayer": {"clave": "ai", "codigo": "AI", "nombre": "Nivel de actividad"},
+    "sedentarismo": {"clave": "ai", "codigo": "AI", "nombre": "Nivel de actividad"},
+}
 
 
 def factores_de(respuestas):
@@ -54,7 +56,7 @@ def factores_de(respuestas):
                 "nombre": pregunta["nombre"],
                 "respuesta": pregunta["opciones"][valor],
                 "puntaje": puntaje,
-                "estado": _estado_factor(puntaje),
+                "componente": COMPONENTES_POR_SENAL[pregunta["clave"]],
             }
         )
     return sorted(factores, key=lambda factor: factor["puntaje"])

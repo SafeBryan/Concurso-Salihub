@@ -44,6 +44,31 @@ def checkin_publico(checkin):
     }
 
 
+def contexto_dia_anterior(fecha):
+    """Resume el día anterior para cerrar el ciclo diario sin atribuir causalidad."""
+    fecha_anterior = fecha - datetime.timedelta(days=1)
+    checkin = CheckIn.objects.filter(fecha=fecha_anterior).first()
+    registro = Registro.objects.select_related("sesion").filter(fecha=fecha_anterior).first()
+
+    if checkin is None and registro is None:
+        return None
+
+    return {
+        "fecha": fecha_anterior,
+        "indice": checkin.indice if checkin else None,
+        "nivel": nivel_publico(checkin.nivel) if checkin else None,
+        "sesion_completada": (
+            {
+                "titulo": registro.sesion.titulo,
+                "valoracion": registro.valoracion,
+                "esfuerzo": registro.esfuerzo,
+            }
+            if registro
+            else None
+        ),
+    }
+
+
 class PasoSerializer(serializers.Serializer):
     orden = serializers.IntegerField()
     contenido = serializers.CharField()
@@ -106,10 +131,11 @@ def checkin(request):
 @api_view(["GET"])
 def indice_hoy(request):
     fecha = hoy(request)
+    anterior = contexto_dia_anterior(fecha)
     del_dia = CheckIn.objects.filter(fecha=fecha).first()
     if del_dia is None:
-        return Response({"fecha": fecha, "hecho": False, "aviso": AVISO})
-    return Response({"hecho": True, "aviso": AVISO, **checkin_publico(del_dia)})
+        return Response({"fecha": fecha, "hecho": False, "aviso": AVISO, "anterior": anterior})
+    return Response({"hecho": True, "aviso": AVISO, "anterior": anterior, **checkin_publico(del_dia)})
 
 
 @api_view(["GET"])

@@ -10,15 +10,14 @@ la persona.
 Premio: **hasta 2 pasantías pagadas** (3 meses).
 Cierre: **lunes 28 de septiembre de 2026, 23:59 (hora de Ecuador).**
 
-
 ---
 
 ## Qué trae
 
-| Parte | Tecnología | Qué hace |
-|---|---|---|
-| `api/` | Python · Django · Django REST Framework · SQLite | Check-in de la mañana, Readiness Index de 0 a 100, sesión del día ajustada al índice, registro de sesiones terminadas |
-| `mobile/` | Flutter | Inicio con el índice y la sesión del día, check-in, sesión guiada con temporizador, «¿Cómo le fue?» e historial |
+| Parte     | Tecnología                                       | Qué hace                                                                                                              |
+| --------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| `api/`    | Python · Django · Django REST Framework · SQLite | Check-in de la mañana, Readiness Index de 0 a 100, sesión del día ajustada al índice, registro de sesiones terminadas |
+| `mobile/` | Flutter                                          | Inicio con el índice y la sesión del día, check-in, sesión guiada con temporizador, «¿Cómo le fue?» e historial       |
 
 Hay **una sola persona de ejemplo** y no hay inicio de sesión. Al cargar los datos quedan dos semanas de
 historial inventado, y el día de hoy queda libre para que usted haga el check-in.
@@ -99,17 +98,17 @@ Revisión y pruebas: `flutter analyze` y `flutter test`.
 
 ### Rutas del API
 
-| Método | Ruta | Qué hace |
-|---|---|---|
-| GET | `/api/perfil/` | La persona de ejemplo |
-| GET | `/api/checkin/preguntas/` | Las 6 preguntas con sus opciones |
-| POST | `/api/checkin/` | Guarda el check-in de hoy. Cuerpo: `{"respuestas": {"energia": 3, ...}}`, con el número de la opción elegida (desde 0) |
-| GET | `/api/indice/hoy/` | El índice de hoy, o `hecho: false` si falta el check-in |
-| GET | `/api/indice/historial/?dias=14` | El índice de los últimos días |
-| GET | `/api/entrenamiento/sesion-del-dia/` | La sesión recomendada según el índice de hoy |
-| GET | `/api/entrenamiento/sesiones/` | Todas las sesiones |
-| GET | `/api/entrenamiento/sesiones/<codigo>/` | Una sesión con sus pasos |
-| GET / POST | `/api/entrenamiento/registros/` | Sesiones terminadas. Cuerpo: `{"sesion": "movilidad-matutina", "valoracion": 1-5, "esfuerzo": 0-10, "comentario": ""}` |
+| Método     | Ruta                                    | Qué hace                                                                                                               |
+| ---------- | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| GET        | `/api/perfil/`                          | La persona de ejemplo                                                                                                  |
+| GET        | `/api/checkin/preguntas/`               | Las 6 preguntas con sus opciones                                                                                       |
+| POST       | `/api/checkin/`                         | Guarda el check-in de hoy. Cuerpo: `{"respuestas": {"energia": 3, ...}}`, con el número de la opción elegida (desde 0) |
+| GET        | `/api/indice/hoy/`                      | El índice de hoy, o `hecho: false` si falta el check-in                                                                |
+| GET        | `/api/indice/historial/?dias=14`        | El índice de los últimos días                                                                                          |
+| GET        | `/api/entrenamiento/sesion-del-dia/`    | La sesión recomendada según el índice de hoy                                                                           |
+| GET        | `/api/entrenamiento/sesiones/`          | Todas las sesiones                                                                                                     |
+| GET        | `/api/entrenamiento/sesiones/<codigo>/` | Una sesión con sus pasos                                                                                               |
+| GET / POST | `/api/entrenamiento/registros/`         | Sesiones terminadas. Cuerpo: `{"sesion": "movilidad-matutina", "valoracion": 1-5, "esfuerzo": 0-10, "comentario": ""}` |
 
 El contenido fijo (preguntas, niveles y sesiones) está en `api/demo/catalogo.py`, y la fórmula del índice
 en `api/demo/indice.py`.
@@ -118,12 +117,12 @@ en `api/demo/indice.py`.
 
 ## Qué evaluamos
 
-| Qué miramos | Qué quiere decir |
-|---|---|
-| Entendió al usuario | Piensa en alguien que no eligió instalar la app, no en un usuario genérico |
-| Funciona | Lo que construyó corre. Importa que funcione, no que se vea bonito |
-| Cómo lo construyó | El historial de commits: si avanzó con orden o subió todo el último día |
-| El código se puede leer | Nombres, estructura y un README que explique la decisión |
+| Qué miramos             | Qué quiere decir                                                           |
+| ----------------------- | -------------------------------------------------------------------------- |
+| Entendió al usuario     | Piensa en alguien que no eligió instalar la app, no en un usuario genérico |
+| Funciona                | Lo que construyó corre. Importa que funcione, no que se vea bonito         |
+| Cómo lo construyó       | El historial de commits: si avanzó con orden o subió todo el último día    |
+| El código se puede leer | Nombres, estructura y un README que explique la decisión                   |
 
 ## Reglas
 
@@ -136,21 +135,44 @@ en `api/demo/indice.py`.
 
 ## Fechas
 
-| Hito | Fecha |
-|---|---|
-| Apertura | Sábado 26 de septiembre, en el stand de SaliHub del DevFest |
-| Cierre | Lunes 28 de septiembre, 23:59 (hora de Ecuador) |
-| Revisión de repositorios | Martes 29 de septiembre a jueves 1 de octubre |
-| Entrevistas | Semana del 5 de octubre |
-| Anuncio de ganadores | Viernes 9 de octubre, por correo |
+| Hito                     | Fecha                                                       |
+| ------------------------ | ----------------------------------------------------------- |
+| Apertura                 | Sábado 26 de septiembre, en el stand de SaliHub del DevFest |
+| Cierre                   | Lunes 28 de septiembre, 23:59 (hora de Ecuador)             |
+| Revisión de repositorios | Martes 29 de septiembre a jueves 1 de octubre               |
+| Entrevistas              | Semana del 5 de octubre                                     |
+| Anuncio de ganadores     | Viernes 9 de octubre, por correo                            |
 
 ---
 
 ## Mi propuesta
 
-> Llene esta sección en su copia.
+### Qué problema vi al usar la app
 
-- **Qué problema vi al usar la app:**
-- **Qué construí y por qué cree que hace volver a la persona:**
-- **Qué cambié en el API y qué en la app:**
-- **Qué haría con más tiempo:**
+Al probar SaliHub por primera vez encontré dos fricciones en el flujo diario de Readiness.
+
+La primera fue descubrir cómo iniciar el check-in. El acceso está representado principalmente por un ícono, por lo que para alguien que no eligió instalar la aplicación puede no ser evidente qué debe hacer al entrar.
+
+La segunda aparece al repetir el check-in. Actualmente se presentan las mismas seis preguntas cada día, incluso cuando algunas señales como sueño, actividad o sedentarismo podrían estar disponibles desde el dispositivo. Para una persona que utiliza SaliHub porque su empresa se lo pidió, repetir información todos los días puede convertir el check-in en otra tarea más.
+
+El problema que quiero resolver no es agregar más funciones, sino reducir el esfuerzo necesario para que la persona obtenga valor de SaliHub y darle una razón clara para volver al día siguiente.
+
+### Hipótesis
+
+Si el check-in pregunta únicamente la información que realmente necesita de la persona, aprovecha las señales que ya podría conocer desde el dispositivo y después explica qué influyó en su Readiness, el flujo diario puede sentirse menos como una obligación y más como información útil.
+
+La experiencia que quiero construir sigue este ciclo:
+
+**entrar → responder solo lo necesario → entender el Readiness → recibir una acción concreta → volver mañana para ver qué cambió**
+
+### Qué construí y por qué creo que hace volver a la persona
+
+> En desarrollo.
+
+### Qué cambié en el API y qué en la app
+
+> En desarrollo.
+
+### Qué haría con más tiempo
+
+> Se completará después de validar el prototipo.

@@ -32,7 +32,12 @@ class _PantallaInicioState extends State<PantallaInicio> {
     );
   }
 
-  void _recargar() => setState(() => _datos = _cargar());
+  void _recargar() {
+    if (!mounted) return;
+    setState(() {
+      _datos = _cargar();
+    });
+  }
 
   Future<void> _abrir(Widget pantalla) async {
     await Navigator.of(context).push(MaterialPageRoute(builder: (_) => pantalla));
@@ -120,11 +125,13 @@ class _TarjetaIndice extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Su Readiness Index', style: texto.titleMedium),
+              Text('¿Cómo amaneció?', style: texto.titleMedium),
               const SizedBox(height: 8),
-              const Text('Responda 6 preguntas rápidas para saber cómo llega hoy.'),
+              const Text('Su check-in de hoy está pendiente. Responda solo lo necesario para conocer su Readiness.'),
+              const SizedBox(height: 6),
+              const Text('Toma aproximadamente 15 segundos.', style: TextStyle(color: Colores.gris)),
               const SizedBox(height: 16),
-              FilledButton(onPressed: alHacerCheckin, child: const Text('Hacer check-in')),
+              FilledButton(onPressed: alHacerCheckin, child: const Text('Hacer check-in express')),
             ],
           ),
         ),

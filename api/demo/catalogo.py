@@ -10,36 +10,42 @@ Todo está escrito para esta demo. Las sesiones son ejercicios genéricos, no el
 PREGUNTAS = [
     {
         "clave": "energia",
+        "nombre": "Energía",
         "texto": "¿Cómo está su energía esta mañana?",
         "opciones": ["Muy baja", "Baja", "Normal", "Buena", "Muy buena"],
         "puntajes": [0.0, 0.25, 0.5, 0.75, 1.0],
     },
     {
         "clave": "estado_corporal",
+        "nombre": "Estado corporal",
         "texto": "¿Cómo siente el cuerpo?",
         "opciones": ["Muy tenso", "Tenso", "Normal", "Relajado", "Muy relajado"],
         "puntajes": [0.0, 0.25, 0.5, 0.75, 1.0],
     },
     {
         "clave": "horas_sueno",
+        "nombre": "Horas de sueño",
         "texto": "¿Cuántas horas durmió?",
         "opciones": ["Menos de 5h", "5-6h", "6-7h", "7-9h", "Más de 9h"],
         "puntajes": [0.0, 0.35, 0.7, 1.0, 0.8],
     },
     {
         "clave": "calidad_sueno",
+        "nombre": "Calidad del sueño",
         "texto": "¿Cómo durmió?",
         "opciones": ["Muy mal", "Mal", "Regular", "Bien", "Muy bien"],
         "puntajes": [0.0, 0.25, 0.5, 0.75, 1.0],
     },
     {
         "clave": "actividad_ayer",
+        "nombre": "Actividad de ayer",
         "texto": "¿Qué tan activo estuvo ayer?",
         "opciones": ["Muy poco", "Poco", "Normal", "Activo", "Muy activo"],
         "puntajes": [0.2, 0.4, 0.7, 1.0, 0.8],
     },
     {
         "clave": "sedentarismo",
+        "nombre": "Tiempo sentado",
         "texto": "Ayer, ¿cuánto tiempo pasó sentado?",
         "opciones": ["Casi todo el día", "Varias horas", "Con pausas", "Poco"],
         "puntajes": [0.0, 0.35, 0.75, 1.0],

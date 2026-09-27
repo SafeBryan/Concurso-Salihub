@@ -33,6 +33,35 @@ def calcular(respuestas):
     return round(sum(puntajes) / len(puntajes) * 100)
 
 
+COMPONENTES_POR_SENAL = {
+    "energia": {"clave": "bsi", "codigo": "BSI", "nombre": "Señales corporales"},
+    "estado_corporal": {"clave": "bsi", "codigo": "BSI", "nombre": "Señales corporales"},
+    "horas_sueno": {"clave": "si", "codigo": "SI", "nombre": "Descanso percibido"},
+    "calidad_sueno": {"clave": "si", "codigo": "SI", "nombre": "Descanso percibido"},
+    "actividad_ayer": {"clave": "ai", "codigo": "AI", "nombre": "Nivel de actividad"},
+    "sedentarismo": {"clave": "ai", "codigo": "AI", "nombre": "Nivel de actividad"},
+}
+
+
+def factores_de(respuestas):
+    """Explica las señales del índice sin atribuir causalidad entre ellas."""
+    validar(respuestas)
+    factores = []
+    for pregunta in PREGUNTAS:
+        valor = respuestas[pregunta["clave"]]
+        puntaje = round(pregunta["puntajes"][valor] * 100)
+        factores.append(
+            {
+                "clave": pregunta["clave"],
+                "nombre": pregunta["nombre"],
+                "respuesta": pregunta["opciones"][valor],
+                "puntaje": puntaje,
+                "componente": COMPONENTES_POR_SENAL[pregunta["clave"]],
+            }
+        )
+    return sorted(factores, key=lambda factor: factor["puntaje"])
+
+
 def nivel_de(indice):
     for nivel in NIVELES:
         if indice >= nivel["desde"]:

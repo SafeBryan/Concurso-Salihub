@@ -40,6 +40,7 @@ def checkin_publico(checkin):
         "indice": checkin.indice,
         "nivel": nivel_publico(checkin.nivel),
         "respuestas": checkin.respuestas,
+        "factores": calculo.factores_de(checkin.respuestas),
     }
 
 

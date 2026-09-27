@@ -33,6 +33,33 @@ def calcular(respuestas):
     return round(sum(puntajes) / len(puntajes) * 100)
 
 
+def _estado_factor(puntaje):
+    if puntaje >= 80:
+        return "Favorable"
+    if puntaje >= 50:
+        return "Intermedia"
+    return "A revisar"
+
+
+def factores_de(respuestas):
+    """Explica las señales del índice sin atribuir causalidad entre ellas."""
+    validar(respuestas)
+    factores = []
+    for pregunta in PREGUNTAS:
+        valor = respuestas[pregunta["clave"]]
+        puntaje = round(pregunta["puntajes"][valor] * 100)
+        factores.append(
+            {
+                "clave": pregunta["clave"],
+                "nombre": pregunta["nombre"],
+                "respuesta": pregunta["opciones"][valor],
+                "puntaje": puntaje,
+                "estado": _estado_factor(puntaje),
+            }
+        )
+    return sorted(factores, key=lambda factor: factor["puntaje"])
+
+
 def nivel_de(indice):
     for nivel in NIVELES:
         if indice >= nivel["desde"]:

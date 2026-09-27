@@ -115,6 +115,30 @@ class _TarjetaIndice extends StatelessWidget {
   final Map<String, dynamic> indice;
   final VoidCallback alHacerCheckin;
 
+  IconData _iconoFactor(String clave) {
+    switch (clave) {
+      case 'energia':
+        return Icons.bolt_outlined;
+      case 'estado_corporal':
+        return Icons.accessibility_new_outlined;
+      case 'horas_sueno':
+      case 'calidad_sueno':
+        return Icons.bedtime_outlined;
+      case 'actividad_ayer':
+        return Icons.directions_walk_outlined;
+      case 'sedentarismo':
+        return Icons.chair_outlined;
+      default:
+        return Icons.insights_outlined;
+    }
+  }
+
+  Color _colorFactor(int puntaje) {
+    if (puntaje >= 80) return const Color(0xFF15803D);
+    if (puntaje >= 50) return Colores.azul;
+    return const Color(0xFFD97706);
+  }
+
   @override
   Widget build(BuildContext context) {
     final texto = Theme.of(context).textTheme;
@@ -137,51 +161,141 @@ class _TarjetaIndice extends StatelessWidget {
         ),
       );
     }
+
     final nivel = indice['nivel'] as Map<String, dynamic>;
     final color = Color(colorDesdeHex(nivel['color'] as String));
+    final factores = ((indice['factores'] as List?) ?? const [])
+        .cast<Map<String, dynamic>>()
+        .take(3)
+        .toList();
+    final todosFavorables = factores.isNotEmpty && factores.every((factor) => (factor['puntaje'] as int) >= 80);
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(20),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              width: 88,
-              height: 88,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  SizedBox.expand(
-                    child: CircularProgressIndicator(
-                      value: (indice['indice'] as int) / 100,
-                      strokeWidth: 9,
-                      color: color,
-                      backgroundColor: color.withValues(alpha: 0.15),
-                    ),
+            Row(
+              children: [
+                SizedBox(
+                  width: 88,
+                  height: 88,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      SizedBox.expand(
+                        child: CircularProgressIndicator(
+                          value: (indice['indice'] as int) / 100,
+                          strokeWidth: 9,
+                          color: color,
+                          backgroundColor: color.withValues(alpha: 0.15),
+                        ),
+                      ),
+                      Text('${indice['indice']}', style: texto.headlineMedium),
+                    ],
                   ),
-                  Text('${indice['indice']}', style: texto.headlineMedium),
-                ],
-              ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Readiness Index', style: texto.labelMedium?.copyWith(color: Colores.gris)),
+                      Text(nivel['nombre'] as String, style: texto.titleMedium?.copyWith(color: color)),
+                      const SizedBox(height: 6),
+                      Text(nivel['recomendacion'] as String),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(width: 20),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            if (factores.isNotEmpty) ...[
+              const SizedBox(height: 20),
+              const Divider(height: 1),
+              const SizedBox(height: 18),
+              Row(
                 children: [
-                  Text('Readiness Index', style: texto.labelMedium?.copyWith(color: Colores.gris)),
-                  Text(nivel['nombre'] as String, style: texto.titleMedium?.copyWith(color: color)),
-                  const SizedBox(height: 6),
-                  Text(nivel['recomendacion'] as String),
-                  const SizedBox(height: 6),
-                  Text(
-                    indice['aviso'] as String,
-                    style: texto.bodySmall?.copyWith(color: Colores.gris),
-                  ),
+                  const Icon(Icons.insights_outlined, color: Colores.navy, size: 21),
+                  const SizedBox(width: 8),
+                  Expanded(child: Text('¿Qué influyó hoy?', style: texto.titleMedium)),
                 ],
               ),
+              const SizedBox(height: 6),
+              Text(
+                todosFavorables
+                    ? 'Las señales principales están en un rango favorable hoy.'
+                    : 'En esta demo, el índice promedia seis señales. Estas son las tres con menor puntaje.',
+                style: texto.bodySmall?.copyWith(color: Colores.gris),
+              ),
+              const SizedBox(height: 14),
+              for (final factor in factores) ...[
+                _FactorReadiness(
+                  factor: factor,
+                  icono: _iconoFactor(factor['clave'] as String),
+                  color: _colorFactor(factor['puntaje'] as int),
+                ),
+                if (factor != factores.last) const SizedBox(height: 12),
+              ],
+            ],
+            const SizedBox(height: 14),
+            Text(
+              indice['aviso'] as String,
+              style: texto.bodySmall?.copyWith(color: Colores.gris),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _FactorReadiness extends StatelessWidget {
+  const _FactorReadiness({required this.factor, required this.icono, required this.color});
+
+  final Map<String, dynamic> factor;
+  final IconData icono;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final texto = Theme.of(context).textTheme;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.10),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(icono, color: color, size: 21),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(factor['nombre'] as String, style: texto.bodyMedium?.copyWith(fontWeight: FontWeight.w700)),
+              const SizedBox(height: 2),
+              Text(factor['respuesta'] as String, style: texto.bodySmall?.copyWith(color: Colores.gris)),
+            ],
+          ),
+        ),
+        const SizedBox(width: 8),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.10),
+            borderRadius: BorderRadius.circular(999),
+          ),
+          child: Text(
+            factor['estado'] as String,
+            style: texto.labelSmall?.copyWith(color: color, fontWeight: FontWeight.w700),
+          ),
+        ),
+      ],
     );
   }
 }

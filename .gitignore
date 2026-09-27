@@ -1,0 +1,13 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+api/demo.sqlite3
+
+# Flutter (mobile/.gitignore tiene el resto)
+mobile/build/
+
+# Sistema
+.DS_Store
+.idea/
+.vscode/
